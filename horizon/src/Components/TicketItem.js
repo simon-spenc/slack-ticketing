@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import useTicket from '../Hooks/useTicket';
+import ActivityFeed from './ActivityFeed';
+
 
 const TicketItem = () => {
   const { id } = useParams();
@@ -65,6 +67,7 @@ const TicketItem = () => {
           {saveStatus}
         </div>
       )}
+      <ActivityFeed ticketId={id} />
     </div>
   );
 };
