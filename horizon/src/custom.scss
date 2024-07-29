@@ -1,0 +1,39 @@
+// Override default variables before the import
+$primary: #ff5900;
+
+.main-nav ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+    background-color: #f8f9fa;
+    margin: 0;
+  }
+  
+  .main-nav li {
+    padding: 1rem;
+  }
+  
+  .main-nav a {
+    text-decoration: none;
+    color: #333;
+  }
+  
+  .main-nav a.button {
+    background-color: #007bff;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+  }
+
+
+  .save-status {
+    transition: opacity 2s ease-in-out;
+    opacity: 1;
+  }
+  
+  .save-status.fade-out {
+    opacity: 0;
+  }
+// Import Bootstrap and its default variables
+@import '~bootstrap/scss/bootstrap.scss';
