@@ -11,10 +11,14 @@ const TicketList = () => {
         const fetchTickets = async () => {
             try {
                 const querySnapshot = await getDocs(collection(db, 'tickets'));
-                const ticketList = querySnapshot.docs.map(doc => ({
-                    id: doc.id,
-                    ...doc.data()
-                }));
+                const ticketList = querySnapshot.docs.map(doc => {
+                    const data = doc.data();
+                    return {
+                        id: doc.id,
+                        ...data,
+                        createdAt: data.createdAt ? data.createdAt.toDate().toLocaleString() : 'N/A'
+                    };
+                });
                 setTickets(ticketList);
             } catch (error) {
                 console.error('Error fetching tickets: ', error);
@@ -35,6 +39,7 @@ const TicketList = () => {
                             <h3>{ticket.title}</h3>
                             <p>Status: {ticket.status}</p>
                             <p>Description: {ticket.description}</p>
+                            <p>Created At: {ticket.createdAt}</p>
                         </Link>
                     </div>
                 ))}
