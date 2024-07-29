@@ -4,7 +4,7 @@ import { getFirestore } from "firebase/firestore";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyAQcn-suHRuBmjWk13jC87pxPVs1J3jqjs",
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: "slack-ticketing-app.firebaseapp.com",
   projectId: "slack-ticketing-app",
   storageBucket: "slack-ticketing-app.appspot.com",
