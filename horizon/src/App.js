@@ -5,6 +5,7 @@ import Home from './Components/Home';
 import TicketList from './Components/TicketList';
 import NewTicket from './Components/NewTicket';
 import TicketItem from './Components/TicketItem';
+import Announcements from './Components/Announcements';
 import './App.css';
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/tickets" element={<TicketList />} />
+          <Route path="/announcements" element={<Announcements />} />
           <Route path="/new-ticket" element={<NewTicket />} />
           <Route path="/ticket/:id" element={<TicketItem />} />
         </Routes>
