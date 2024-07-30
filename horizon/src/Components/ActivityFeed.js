@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
 
-const ActivityFeed = ({ ticketId }) => {
+const ActivityFeed = ({ ticketId, userEmail }) => {
   const [activities, setActivities] = useState([]);
   const [newComment, setNewComment] = useState('');
 
@@ -31,7 +31,7 @@ const ActivityFeed = ({ ticketId }) => {
       await addDoc(collection(db, 'tickets', ticketId, 'activities'), {
         type: 'comment',
         content: newComment,
-        user: 'Current User', // Replace with actual user info when you implement authentication
+        user: userEmail, // Use the user's email instead of 'Current User'
         timestamp: serverTimestamp()
       });
       setNewComment('');
