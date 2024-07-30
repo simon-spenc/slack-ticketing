@@ -1,20 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { db } from '../firebase';
-import { collection, addDoc, getDocs, query, orderBy, limit } from 'firebase/firestore';
+import { db, auth } from '../firebase';
+import { collection, addDoc, getDocs, query, orderBy, limit, where } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
+import { AuthContext } from '../Contexts/AuthContext';
 
 const NewTicket = () => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [status, setStatus] = useState('Open');
     const navigate = useNavigate();
+    const { user } = useContext(AuthContext);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const currentDate = new Date();
         try {
-            const ticketNumber = await getNextTicketNumber();
+            if (!user) {
+                throw new Error('No authenticated user');
+            }
+            const userDoc = await getDocs(query(collection(db, 'users'), where('email', '==', user.email)));
+            if (userDoc.empty) {
+                throw new Error('User document not found');
+            }
+            const organizationId = userDoc.docs[0].data().organizationId;
+            if (!organizationId) {
+                throw new Error('Organization ID not found for user');
+            }
+            const ticketNumber = await getNextTicketNumber(organizationId);
             const docRef = await addDoc(collection(db, 'tickets'), {
                 ticketId: uuidv4(),
                 ticketNumber,
@@ -22,7 +35,8 @@ const NewTicket = () => {
                 description,
                 status,
                 createdAt: currentDate,
-                updatedAt: currentDate
+                updatedAt: currentDate,
+                organizationId
             });
             setTitle('');
             setDescription('');
@@ -30,13 +44,13 @@ const NewTicket = () => {
             navigate(`/ticket/${docRef.id}`);
         } catch (error) {
             console.error('Error creating ticket: ', error);
-            alert('Error creating ticket. Please try again.');
+            alert(`Error creating ticket: ${error.message}`);
         }
     };
-
-    const getNextTicketNumber = async () => {
+    
+    const getNextTicketNumber = async (organizationId) => {
         const ticketsRef = collection(db, 'tickets');
-        const q = query(ticketsRef, orderBy('ticketNumber', 'desc'), limit(1));
+        const q = query(ticketsRef, where('organizationId', '==', organizationId), orderBy('ticketNumber', 'desc'), limit(1));
         const querySnapshot = await getDocs(q);
         const lastTicket = querySnapshot.docs[0];
         const lastTicketNumber = lastTicket ? lastTicket.data().ticketNumber : 0;

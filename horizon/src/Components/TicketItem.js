@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { AuthContext } from '../Contexts/AuthContext';
 import useTicket from '../Hooks/useTicket';
 import ActivityFeed from './ActivityFeed';
 
-
 const TicketItem = () => {
+  const { user } = useContext(AuthContext);
   const { id } = useParams();
   const { ticket, loading, error, updateTicket } = useTicket(id);
   const [formData, setFormData] = useState({});
@@ -67,7 +68,7 @@ const TicketItem = () => {
           {saveStatus}
         </div>
       )}
-      <ActivityFeed ticketId={id} />
+      <ActivityFeed ticketId={id} userEmail={user?.email} />
     </div>
   );
 };

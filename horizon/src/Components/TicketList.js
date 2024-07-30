@@ -1,16 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../firebase';
+import React, { useState, useEffect, useContext } from 'react';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db, auth } from '../firebase';
 import { Link } from 'react-router-dom';
-
+import { AuthContext } from '../Contexts/AuthContext';
 
 const TicketList = () => {
     const [tickets, setTickets] = useState([]);
+    const { user } = useContext(AuthContext);
 
     useEffect(() => {
         const fetchTickets = async () => {
             try {
-                const querySnapshot = await getDocs(collection(db, 'tickets'));
+                const userDoc = await getDocs(query(collection(db, 'users'), where('email', '==', user.email)));
+                const organizationId = userDoc.docs[0].data().organizationId;
+                const q = query(collection(db, 'tickets'), where('organizationId', '==', organizationId));
+                const querySnapshot = await getDocs(q);
                 const ticketList = querySnapshot.docs.map(doc => {
                     const data = doc.data();
                     return {
@@ -26,7 +30,7 @@ const TicketList = () => {
         };
 
         fetchTickets();
-    }, []);
+    }, [user]);
 
     return (
         <div>
