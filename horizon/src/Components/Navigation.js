@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { AuthContext } from '../Contexts/AuthContext';
 import '../custom.scss';
 
-const Navigation = () => {
+const Navigation = ({ organizationName }) => {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
 
@@ -31,6 +31,7 @@ const Navigation = () => {
             <li><Link to="/new-ticket" className="button">Create New Ticket</Link></li>
             <li><Link to="/profile">Profile</Link></li>
             <li><button onClick={handleLogout}>Logout</button></li>
+            <li>{organizationName && <div className="org-name">{organizationName}</div>}</li>
           </>
         ) : (
           <>
