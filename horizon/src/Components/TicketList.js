@@ -20,7 +20,8 @@ const TicketList = () => {
                     return {
                         id: doc.id,
                         ...data,
-                        createdAt: data.createdAt ? data.createdAt.toDate().toLocaleString() : 'N/A'
+                        createdAt: data.createdAt ? data.createdAt.toDate().toLocaleString() : 'N/A',
+                        fromSlack: data.fromSlack ? 'Created from Slack' : ''
                     };
                 });
                 setTickets(ticketList);
@@ -44,6 +45,7 @@ const TicketList = () => {
                             <p>Status: {ticket.status}</p>
                             <p>Description: {ticket.description}</p>
                             <p>Created At: {ticket.createdAt}</p>
+                            <p>{ticket.fromSlack}</p>
                         </Link>
                     </div>
                 ))}
