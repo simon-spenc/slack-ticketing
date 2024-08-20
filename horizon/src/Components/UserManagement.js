@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { collection, query, where, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore';
 import { db, auth } from '../firebase';
+import SlackIntegration from './SlackIntegration';
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
   const [newUserEmail, setNewUserEmail] = useState('');
   const [error, setError] = useState(null);
+  const [organizationId, setOrganizationId] = useState(null);
 
   useEffect(() => {
     fetchUsers();
@@ -16,9 +18,10 @@ const UserManagement = () => {
     if (!currentUser) return;
 
     const userDoc = await getDocs(query(collection(db, 'users'), where('email', '==', currentUser.email)));
-    const organizationId = userDoc.docs[0].data().organizationId;
+    const orgId = userDoc.docs[0].data().organizationId;
+    setOrganizationId(orgId);
 
-    const q = query(collection(db, 'users'), where('organizationId', '==', organizationId));
+    const q = query(collection(db, 'users'), where('organizationId', '==', orgId));
     const querySnapshot = await getDocs(q);
     setUsers(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
   };
@@ -106,6 +109,7 @@ const UserManagement = () => {
           ))}
         </tbody>
       </table>
+      {organizationId && <SlackIntegration organizationId={organizationId} />}
     </div>
   );
 };

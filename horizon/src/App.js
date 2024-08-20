@@ -12,6 +12,8 @@ import SignUp from './Components/SignUp';
 import UserManagement from './Components/UserManagement';
 import PrivateRoute from './Components/PrivateRoute';
 import UserProfile from './Components/UserProfile';
+import SlackIntegration from './Components/SlackIntegration';
+import SlackCallback from './Components/SlackCallback';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -36,6 +38,8 @@ function App() {
             <Route path="/new-ticket" element={<PrivateRoute><NewTicket /></PrivateRoute>} />
             <Route path="/ticket/:id" element={<PrivateRoute><TicketItem /></PrivateRoute>} />
             <Route path="/profile" element={<PrivateRoute><UserProfile /></PrivateRoute>} />
+            <Route path="/slack-integration" element={<PrivateRoute><SlackIntegration /></PrivateRoute>} />
+            <Route path="/slack-callback" element={<SlackCallback />} />
           </Routes>
         </div>
       </Layout>
